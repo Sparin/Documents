@@ -12,6 +12,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using Sparin.Documents.Configuration;
+using Sparin.Documents.Services;
+using Sparin.Documents.Services.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Sparin.Documents
@@ -25,14 +29,21 @@ namespace Sparin.Documents
         {
             Configuration = configuration;
             _env = env;
-        }        
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string documentDbConnectionString = Configuration.GetConnectionString("DocumentDb");
+            services.AddOptions();
+            services.Configure<DocumentDbOptions>(Configuration.GetSection("DocumentDb"));
+
 #if DEBUG
             services.AddCors();
 #endif
+
+            services.AddSingleton<MongoClient>(new MongoClient(documentDbConnectionString));
+            services.AddSingleton<ICollectionService, CollectionService>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)

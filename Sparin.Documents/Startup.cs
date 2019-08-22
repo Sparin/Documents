@@ -44,6 +44,7 @@ namespace Sparin.Documents
 
             services.AddSingleton<MongoClient>(new MongoClient(documentDbConnectionString));
             services.AddSingleton<ICollectionService, CollectionService>();
+            services.AddSingleton<IDocumentService, DocumentService>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)

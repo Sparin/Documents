@@ -23,6 +23,11 @@ namespace Sparin.Documents.Services
 
         public async Task CreateCollectionAsync(string collectionName, BsonDocument validator, DocumentValidationLevel validationLevel)
         {
+            if (collectionName == null)
+                throw new ArgumentNullException(nameof(collectionName));
+            if (validator == null)
+                throw new ArgumentNullException(nameof(validator));
+
             var database = _mongoClient.GetDatabase(_options.DatabaseName);
             var options = new CreateCollectionOptions<BsonDocument>()
             {
@@ -35,12 +40,18 @@ namespace Sparin.Documents.Services
 
         public async Task DeleteCollectionAsync(string collectionName)
         {
+            if (collectionName == null)
+                throw new ArgumentNullException(nameof(collectionName));
+
             var database = _mongoClient.GetDatabase(_options.DatabaseName);
             await database.DropCollectionAsync(collectionName);
         }
 
         public async Task<IEnumerable<string>> GetCollectionNamesAsync(BsonDocument filter)
         {
+            if (filter == null)
+                throw new ArgumentNullException(nameof(filter));
+
             var database = _mongoClient.GetDatabase(_options.DatabaseName);
             using (var cursor = await database.ListCollectionsAsync(new ListCollectionsOptions() { Filter = filter }))
             {
@@ -51,6 +62,9 @@ namespace Sparin.Documents.Services
 
         public async Task<BsonDocument> FindCollectionAsync(string collectionName)
         {
+            if (collectionName == null)
+                throw new ArgumentNullException(nameof(collectionName));
+
             var database = _mongoClient.GetDatabase(_options.DatabaseName);
             var filter = Builders<BsonDocument>.Filter.Eq("name", collectionName);
             using (var cursor = await database.ListCollectionsAsync(new ListCollectionsOptions() { Filter = filter }))
@@ -58,18 +72,24 @@ namespace Sparin.Documents.Services
                 var result = await cursor.FirstOrDefaultAsync();
                 return result;
             }
-            //return database.GetCollection<BsonDocument>(collectionName);
         }
 
 
         public async Task<BsonDocument> UpdateCollectionAsync(string collectionName, BsonDocument validator, DocumentValidationLevel validationLevel)
         {
+            if (collectionName == null)
+                throw new ArgumentNullException(nameof(collectionName));
+            if (validator == null)
+                throw new ArgumentNullException(nameof(validator));
+
             var database = _mongoClient.GetDatabase(_options.DatabaseName);
 
-            var updateSchemaCommand = new BsonDocument();
-            updateSchemaCommand.Add("collMod", collectionName);
-            updateSchemaCommand.Add("validator", validator);
-            updateSchemaCommand.Add("validationLevel", validationLevel.ToString().ToLower());
+            var updateSchemaCommand = new BsonDocument
+            {
+                { "collMod", collectionName },
+                { "validator", validator },
+                { "validationLevel", validationLevel.ToString().ToLower() }
+            };
 
             var result = await database.RunCommandAsync<BsonDocument>(updateSchemaCommand);
             return result;

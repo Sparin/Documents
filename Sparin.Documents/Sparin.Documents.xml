@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sparin.Documents</name>
+    </assembly>
+    <members>
+        <member name="M:Sparin.Documents.Controllers.CollectionController.GetCollectionNamesAsync(Newtonsoft.Json.Linq.JObject)">
+             <summary>
+             Retreive collection's names
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /api/collection
+                 {
+                     "name": {
+                         "$regex": "pen"
+                     }
+                 }
+            
+                 Response Body
+                 [
+                     "pens",
+                     "pencils"
+                 ]
+             </remarks>
+             <param name="filter">Filter definition</param>
+             <response code="200">Successful operation</response>
+        </member>
+        <member name="M:Sparin.Documents.Controllers.CollectionController.CreateCollectionAsync(System.String,Newtonsoft.Json.Linq.JObject,MongoDB.Driver.DocumentValidationLevel)">
+             <summary>
+             Create new collection
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /api/collection/orders?validationLevel=strict
+                 {
+                     $jsonSchema: {
+                         required: [ "name" ],
+                         properties: {
+                             name: {
+                                 bsonType: "string",
+                                 description: "must be a string and is required"
+                             }
+                         }
+                     }
+                 }
+            
+             </remarks>
+             <param name="collectionName">Collection name</param>
+             <param name="validator">Validator of collection</param>
+             <param name="validationLevel">Validation level</param>
+             <response code="200">Successful operation</response>
+             <response code="400">Validation checks is not passed</response>
+        </member>
+        <member name="M:Sparin.Documents.Controllers.CollectionController.UpdateCollectionAsync(System.String,Newtonsoft.Json.Linq.JObject,MongoDB.Driver.DocumentValidationLevel)">
+             <summary>
+             Update existing collection by name
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 PUT /api/collection/orders?validationLevel=strict
+                 {
+                     $jsonSchema: {
+                         required: [ "name" ],
+                         properties: {
+                             name: {
+                                 bsonType: "string",
+                                 description: "must be a string and is required"
+                             }
+                         }
+                     }
+                 }
+            
+             </remarks>
+             <param name="collectionName">Collection name</param>
+             <param name="validator">Validator of collection</param>
+             <param name="validationLevel">Validation level</param>
+             <response code="200">Successful operation</response>
+             <response code="400">Validation checks is not passed</response>
+             <response code="404">Collection is not found</response>
+        </member>
+        <member name="M:Sparin.Documents.Controllers.CollectionController.DeteleCollectionAsync(System.String)">
+             <summary>
+             Delete collection by name
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 DELETE /api/collection/orders
+            
+             </remarks>
+             <param name="collectionName">Name of collection</param>
+             <response code="204">Successful operation</response>
+             <response code="404">Collection is not found</response>        
+        </member>
+        <member name="M:Sparin.Documents.Controllers.DocumentController.GetDocumentsAsync(System.String,Newtonsoft.Json.Linq.JObject,System.Int32,System.Int32)">
+             <summary>
+             Search documents from collection
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /api/document/orders/search
+                 {
+                     "name": {
+                         "$regex": "pen"
+                     }
+                 }
+                 
+             </remarks>
+             <param name="collectionName">Name of collection</param>
+             <param name="filter">Filter definition</param>
+             <param name="page">Offset. Depends on limit</param>
+             <param name="limit">Count of documents per request (max 50)</param>
+             <response code="200">Successful operation</response>
+             <response code="400">Invalid format of filter</response>
+             <response code="404">Collection is not found</response>
+        </member>
+        <member name="M:Sparin.Documents.Controllers.DocumentController.GetDocumentAsync(System.String,System.String)">
+             <summary>
+             Get document by id
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 GET /api/document/orders/5d5d36003c9164f8adb6f62e
+                 
+             </remarks>
+             <param name="collectionName">Name of collection</param>
+             <param name="id">Identificator of document</param>
+             <response code="200">Successful operation</response>
+             <response code="400">Invalid format of identificator</response>
+             <response code="404">Document or collection is not found</response>
+        </member>
+        <member name="M:Sparin.Documents.Controllers.DocumentController.CreateDocumentAsync(System.String,Newtonsoft.Json.Linq.JObject)">
+             <summary>
+             Create new document 
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /api/document/orders
+                 {
+                     "Name": "Michael"
+                     "ETA": 12312542344543
+                 }
+                 
+             </remarks>
+             <param name="collectionName">Name of collection</param>
+             <param name="document">Descpition of future document</param>
+             <response code="200">Successful operation</response>
+             <response code="400">Invalid format of document or validation checks has failed</response>
+             <response code="404">Collection is not found</response>
+        </member>
+        <member name="M:Sparin.Documents.Controllers.DocumentController.UpdateDocumentAsync(System.String,System.String,Newtonsoft.Json.Linq.JObject)">
+             <summary>
+             Update existing document by id
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 PUT /api/document/orders/5d5d34e73c9164f8adb6f62b
+                 {
+                     "Name": "Michael"
+                     "ETA": 12312542344543
+                 }
+                 
+             </remarks>
+             <param name="collectionName">Name of collection</param>
+             <param name="id">Identificator of document</param>
+             <param name="document">Descpition of future document</param>
+             <response code="200">Successful operation</response>
+             <response code="400">Invalid format of document/identificator or validation checks has failed</response>
+             <response code="404">Collection or document is not found</response>
+        </member>
+        <member name="M:Sparin.Documents.Controllers.DocumentController.DeleteDocumentAsync(System.String,System.String)">
+             <summary>
+             Delete document by id
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 DELETE /api/document/orders/5d5d34e73c9164f8adb6f62b
+                 
+             </remarks>
+             <param name="collectionName">Name of collection</param>
+             <param name="id">Identificator of document</param>
+             <response code="204">Successful operation</response>
+             <response code="400">Invalid format of identificator</response>
+             <response code="404">Collection is not found</response>
+        </member>
+    </members>
+</doc>

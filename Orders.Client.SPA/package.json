@@ -1,0 +1,48 @@
+{
+  "name": "orders.client.spa",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:5000",
+  "dependencies": {
+    "@types/jest": "24.0.17",
+    "@types/node": "12.7.0",
+    "@types/path-to-regexp": "^1.7.0",
+    "@types/react": "16.8.25",
+    "@types/react-dom": "16.8.5",
+    "@types/react-router-dom": "^4.3.4",
+    "antd": "^3.21.4",
+    "moment": "^2.24.0",
+    "path-to-regexp": "^3.0.0",
+    "query-string": "^6.8.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "ts-transformer-keys": "^0.3.5",
+    "typescript": "3.5.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "uglifyjs-webpack-plugin": "^2.2.0"
+  }
+}
